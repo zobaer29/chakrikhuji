@@ -5,7 +5,9 @@ import { subscribeTheme, getTheme, getServerTheme, toggleTheme } from "./theme";
 
 const links = [
   ["The process", "/#how-it-works"],
-  ["What’s inside", "/#features"],
+  ["Who it’s for", "/#features"],
+  ["Fairness", "/#fairness"],
+  ["Pricing", "/#pricing"],
   ["Questions", "/#faq"],
 ];
 export default function Navbar() {

@@ -116,21 +116,21 @@ const HybridHeroCanvas = () => {
     <section id="home" className="hero-section">
       <div className="home-container hero-layout">
         <div className="hero-copy">
-          <span className="eyebrow">ChakriKhuji / The next step</span>
-          <h1>Find where<br />you <em>fit.</em></h1>
-          <p>A job description is a wish list. Your resume is a story. Put them side by side and see where they meet.</p>
-          <div className="hero-actions"><a className="primary-action" href="#scanner">Try the resume preview <span aria-hidden="true">↗</span></a><a className="text-action" href="#how-it-works">How it works</a></div>
-          <p className="hero-footnote">A work in progress, built for your next move.</p>
+          <span className="eyebrow">Our tagline: Better CVs, Smarter Hiring, Fairer Decisions.</span>
+          <h1>Better matches.<br /><em>Fairer chances.</em></h1>
+          <p>Helping job seekers improve their CVs and HR teams find relevant candidates—with AI insights, fairness-aware shortlisting, and people making the final decisions.</p>
+          <div className="hero-actions"><a className="primary-action" href="#scanner">Explore the sample report <span aria-hidden="true">↗</span></a><a className="text-action" href="#features">For job seekers & HR</a></div>
+          <p className="hero-footnote">Platform in development. Explore an illustrative preview.</p>
         </div>
         <figure className="hero-visual">
           <div className="animation-stage">
             <canvas ref={canvasRef} width={1280} height={720} role="img" aria-label="Animated resume scanner" className="hero-canvas" />
             {(!imagesLoaded || loadFailed) && <div className="animation-status" role="status">{loadFailed ? "Animation unavailable" : "Loading animation…"}</div>}
           </div>
-          <figcaption><span>01 — A different look at your experience</span><span>Keep looking forward ↗</span></figcaption>
+          <figcaption><span>01 — Connect experience with opportunity</span><span>Built for both sides ↗</span></figcaption>
         </figure>
       </div>
-      <div className="home-container hero-bottom"><span>A little perspective for a big decision.</span><a href="#how-it-works">Take a look around ↓</a></div>
+      <div className="home-container hero-bottom"><span>Smarter, faster, more transparent recruitment.</span><a href="#how-it-works">Take a look around ↓</a></div>
     </section>
   );
 };

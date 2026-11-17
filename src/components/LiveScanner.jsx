@@ -10,8 +10,8 @@ export default function LiveScanner() {
       <div className="home-container">
         <div className="section-heading scanner-heading">
           <span className="eyebrow">Take a look inside</span>
-          <h2>A clearer picture of<br />your next opportunity.</h2>
-          <p>Explore a sample match report. Your file stays on your device; this preview does not analyze your resume.</p>
+          <h2>See a CV match<br />in context.</h2>
+          <p>Explore an illustrative CV-to-job comparison with matched skills, skill gaps, and improvement suggestions. Your file stays on your device; live analysis and ATS checks are not connected.</p>
         </div>
         <div className="scanner-grid">
           <form className="scanner-form" onSubmit={(event) => { event.preventDefault(); setPreviewed(true); }}>
@@ -33,9 +33,9 @@ export default function LiveScanner() {
           </form>
           <article className={`sample-report${previewed ? " report-ready" : ""}`} aria-label="Sample resume match report">
             <div className="report-header"><div><span className="eyebrow">Illustrative report</span><h3>A promising match.</h3></div><span className="match-score">92<small>%</small></span></div>
-            <div className="report-group"><h4>Skills that carry over</h4><div className="skill-tags">{["React.js", "Node.js", "MongoDB", "REST API"].map((skill) => <span key={skill}>✓ {skill}</span>)}</div></div>
-            <div className="report-group"><h4>Room to grow</h4><div className="skill-tags skill-tags-growth">{["Docker", "AWS"].map((skill) => <span key={skill}>+ {skill}</span>)}</div></div>
-            <div className="report-feedback"><h4>A little perspective</h4><p>Strong full-stack architecture foundation. Learning containerization with Docker could strengthen this example profile for relevant roles.</p></div>
+            <div className="report-group"><h4>Matched skills</h4><div className="skill-tags">{["React.js", "Node.js", "MongoDB", "REST API"].map((skill) => <span key={skill}>✓ {skill}</span>)}</div></div>
+            <div className="report-group"><h4>Skill gaps to explore</h4><div className="skill-tags skill-tags-growth">{["Docker", "AWS"].map((skill) => <span key={skill}>+ {skill}</span>)}</div></div>
+            <div className="report-feedback"><h4>Personalized suggestions · sample</h4><p>Strong full-stack architecture foundation. Learning containerization with Docker could strengthen this example profile for relevant roles.</p></div>
             <p className="scanner-note">A match score is one signal, and does not guarantee an interview.</p>
           </article>
         </div>
