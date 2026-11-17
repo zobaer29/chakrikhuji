@@ -5,7 +5,7 @@ const HybridHeroCanvas = () => {
   const canvasRef = useRef(null);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [loadFailed, setLoadFailed] = useState(false);
-  const frameCount = 100; // আপনার মোট ফ্রেম সংখ্যা
+  const frameCount = 100;
 
   const currentFrame = (index) =>
     `/image/hero/frame_${index.toString().padStart(3, "0")}.png`;
@@ -29,7 +29,7 @@ const HybridHeroCanvas = () => {
       }
     };
 
-    // ১. ইমেজ প্রিলোড করা
+    // Preload images
     for (let i = 1; i <= frameCount; i++) {
       const img = new Image();
       img.onload = () => {
@@ -46,43 +46,39 @@ const HybridHeroCanvas = () => {
     canvas.width = 1280;
     canvas.height = 720;
 
-    // ২. অ্যানিমেশন ও স্ক্রল ভেলোসিটি ভেরিয়েবল
-    let currentFrameFloat = 0; // দশমিক মান রাখা হচ্ছে স্মুথনেসের জন্য
+    let currentFrameFloat = 0;
     let scrollVelocity = 0;
     let lastScrollY = window.scrollY;
     let animationFrameId;
     let lastTime = null;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    // স্ক্রল ইভেন্ট লিসেনার
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const deltaY = currentScrollY - lastScrollY;
-      
-      // স্ক্রলের গতির সাথে ফ্রেম পরিবর্তনের তীব্রতা (0.08 অ্যাডজাস্ট করতে পারেন)
-      scrollVelocity = Math.max(-5, Math.min(5, scrollVelocity + deltaY * 0.08)); 
+      scrollVelocity = Math.max(
+        -5,
+        Math.min(5, scrollVelocity + deltaY * 0.08),
+      );
       lastScrollY = currentScrollY;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // ৩. মেইন রেন্ডার লুপ (Auto-loop + Scroll Velocity Merge)
-    const baseSpeed = 0.4; // অটো-লুপের স্বাভাবিক গতি (প্রতি ফ্রেমে ০.৪ স্টেপ)
+    const baseSpeed = 0.4;
 
     const render = (time) => {
       animationFrameId = requestAnimationFrame(render);
 
-      // অটো-লুপ গতি + স্ক্রল ভেলোসিটি যোগ করা
-      const elapsed = lastTime === null ? 0 : Math.min((time - lastTime) / 16.667, 3);
+      const elapsed =
+        lastTime === null ? 0 : Math.min((time - lastTime) / 16.667, 3);
       lastTime = time;
       if (!motion.matches && !document.hidden) {
         currentFrameFloat += (baseSpeed + scrollVelocity) * elapsed;
       }
 
-      // স্ক্রল ভেলোসিটি ধীরে ধীরে কমানো (Friction / Damping ইফেক্ট)
       scrollVelocity *= Math.pow(0.9, elapsed);
 
-      // ১০০ ফ্রেমের মধ্যে লুপ রাখা (সামনে বা পিছনে যেদিকেই যাক)
       if (currentFrameFloat >= frameCount) {
         currentFrameFloat = currentFrameFloat % frameCount;
       } else if (currentFrameFloat < 0) {
@@ -90,10 +86,13 @@ const HybridHeroCanvas = () => {
       }
 
       const frameIndex = Math.floor(currentFrameFloat);
-
       const image = images[frameIndex];
-      // Failed requests also set complete=true; dimensions confirm a usable image.
-      if (image?.complete && image.naturalWidth > 0 && image.naturalHeight > 0) {
+
+      if (
+        image?.complete &&
+        image.naturalWidth > 0 &&
+        image.naturalHeight > 0
+      ) {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
       }
@@ -113,24 +112,64 @@ const HybridHeroCanvas = () => {
   }, []);
 
   return (
-    <section id="home" className="hero-section">
-      <div className="home-container hero-layout">
-        <div className="hero-copy">
-          <span className="eyebrow">Our tagline: Better CVs, Smarter Hiring, Fairer Decisions.</span>
-          <h1>Better matches.<br /><em>Fairer chances.</em></h1>
-          <p>Helping job seekers improve their CVs and HR teams find relevant candidates—with AI insights, fairness-aware shortlisting, and people making the final decisions.</p>
-          <div className="hero-actions"><a className="primary-action" href="#scanner">Explore the sample report <span aria-hidden="true">↗</span></a><a className="text-action" href="#features">For job seekers & HR</a></div>
-          <p className="hero-footnote">Platform in development. Explore an illustrative preview.</p>
-        </div>
-        <figure className="hero-visual">
-          <div className="animation-stage">
-            <canvas ref={canvasRef} width={1280} height={720} role="img" aria-label="Animated resume scanner" className="hero-canvas" />
-            {(!imagesLoaded || loadFailed) && <div className="animation-status" role="status">{loadFailed ? "Animation unavailable" : "Loading animation…"}</div>}
+    <section id="home" className="pt-8 sm:pt-16 pb-12 sm:pb-16">
+      <div className="w-[min(1200px,calc(100%-36px))] sm:w-[min(1200px,calc(100%-48px))] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+        {/* Left Copy */}
+        <div className="flex flex-col items-start">
+          <span className="text-[11px] font-bold tracking-[2px] uppercase text-[var(--green)] mb-3">
+            Better CVs · Smarter Hiring · Fairer Decisions
+          </span>
+          <h1 className="text-[clamp(38px,6vw,72px)] font-bold tracking-tight text-[var(--ink)] leading-[1.08] mb-5">
+            Better matches.
+            <br />
+            <em className="font-serif font-normal text-[var(--green)] not-italic">
+              Fairer chances.
+            </em>
+          </h1>
+          <p className="text-base sm:text-lg text-[var(--muted)] leading-relaxed max-w-xl mb-8">
+            Helping job seekers improve their CVs and HR teams find relevant
+            candidates—with AI insights, fairness-aware shortlisting, and people
+            making the final decisions.
+          </p>
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
+            <a
+              href="#scanner"
+              className="inline-flex items-center gap-3 px-6 py-3.5 rounded-xl bg-[var(--green)] text-[var(--paper)] text-sm font-semibold hover:brightness-105 active:scale-[0.98] transition-all shadow-sm"
+            >
+              <span>Explore the sample report</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+            <a
+              href="#features"
+              className="inline-flex items-center text-sm font-semibold text-[var(--ink)] hover:text-[var(--green)] border-b border-[var(--line)] hover:border-current pb-0.5 transition-colors"
+            >
+              For job seekers & HR
+            </a>
           </div>
-          <figcaption><span>01 — Connect experience with opportunity</span><span>Built for both sides ↗</span></figcaption>
+        </div>
+
+        {/* Hero Visual Canvas */}
+        <figure className="m-0 min-w-0">
+          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--line)] bg-[var(--surface)] shadow-md aspect-video flex items-center justify-center">
+            <canvas
+              ref={canvasRef}
+              width={1280}
+              height={720}
+              role="img"
+              aria-label="Animated resume scanner"
+              className="w-full h-full object-cover"
+            />
+            {(!imagesLoaded || loadFailed) && (
+              <div
+                className="absolute inset-0 flex items-center justify-center text-xs font-medium text-[var(--muted)] bg-[var(--surface)]/80 backdrop-blur-xs"
+                role="status"
+              >
+                {loadFailed ? "Animation unavailable" : "Loading animation…"}
+              </div>
+            )}
+          </div>
         </figure>
       </div>
-      <div className="home-container hero-bottom"><span>Smarter, faster, more transparent recruitment.</span><a href="#how-it-works">Take a look around ↓</a></div>
     </section>
   );
 };

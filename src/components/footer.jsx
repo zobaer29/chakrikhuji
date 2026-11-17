@@ -10,21 +10,39 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="site-footer home-container">
-      <div>
-        <Link className="footer-brand" href="/#home">
-          Chakri<span>Khuji</span>
-        </Link>
-        <p>AI-powered recruitment. Human-led decisions.</p>
-      </div>
-      <nav aria-label="Footer navigation">
-        {links.map(([label, href]) => (
-          <Link key={href} href={href}>{label}</Link>
-        ))}
-      </nav>
-      <div className="footer-bottom">
-        <span>© 2026 ChakriKhuji</span>
-        <span>Built for both sides of hiring.</span>
+    <footer className="border-t border-[var(--line)] py-12 bg-[var(--paper)]">
+      <div className="w-[min(1200px,calc(100%-36px))] sm:w-[min(1200px,calc(100%-48px))] mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 pb-10">
+          <div>
+            <Link
+              href="/#home"
+              className="text-2xl font-black tracking-tight text-[var(--ink)]"
+            >
+              Chakri<span className="text-[var(--green)]">Khuji</span>
+              <span className="text-[var(--green)]">.</span>
+            </Link>
+            <p className="text-xs sm:text-sm text-[var(--muted)] mt-1.5">
+              AI-powered recruitment. Human-led decisions.
+            </p>
+          </div>
+
+          <nav aria-label="Footer navigation" className="flex flex-wrap gap-6 sm:gap-8">
+            {links.map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                className="text-xs sm:text-sm font-medium text-[var(--muted)] hover:text-[var(--green)] transition-colors"
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+
+        <div className="pt-8 border-t border-[var(--line)] flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-[var(--muted)]">
+          <span>© 2026 ChakriKhuji. All rights reserved.</span>
+          <span>Built for both sides of hiring.</span>
+        </div>
       </div>
     </footer>
   );
