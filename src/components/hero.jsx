@@ -149,8 +149,18 @@ const HybridHeroCanvas = () => {
         </div>
 
         {/* Hero Visual Canvas */}
-        <figure className="m-0 min-w-0">
-          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-[var(--line)] bg-[var(--surface)] shadow-md aspect-video flex items-center justify-center">
+        <figure className="relative m-0 min-w-0 group">
+          {/* Subtle Ambient Backlight */}
+          <div className="absolute -inset-2 rounded-[2rem_0.75rem_2rem_0.75rem] bg-gradient-to-tr from-[var(--green)]/20 via-transparent to-[var(--orange)]/25 blur-xl opacity-75 pointer-events-none" />
+
+          {/* Asymmetric Cut-Corner Container */}
+          <div
+            className="relative overflow-hidden rounded-tl-[2.5rem] rounded-br-[2.5rem] rounded-tr-xl rounded-bl-xl border-2 border-[var(--orange)]/60 hover:border-[var(--orange)] bg-[var(--surface)] shadow-2xl aspect-video flex items-center justify-center transition-colors"
+            style={{
+              clipPath:
+                "polygon(0 24px, 24px 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%)",
+            }}
+          >
             <canvas
               ref={canvasRef}
               width={1280}
@@ -159,6 +169,10 @@ const HybridHeroCanvas = () => {
               aria-label="Animated resume scanner"
               className="w-full h-full object-cover"
             />
+
+            {/* Subtle Glass Inner Rim Highlight */}
+            <div className="pointer-events-none absolute inset-0 border border-white/10 rounded-tl-[2.5rem] rounded-br-[2.5rem] rounded-tr-xl rounded-bl-xl" />
+
             {(!imagesLoaded || loadFailed) && (
               <div
                 className="absolute inset-0 flex items-center justify-center text-xs font-medium text-[var(--muted)] bg-[var(--surface)]/80 backdrop-blur-xs"

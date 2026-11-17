@@ -4,8 +4,9 @@ import { useState, useSyncExternalStore } from "react";
 import { subscribeTheme, getTheme, getServerTheme, toggleTheme } from "./theme";
 
 const links = [
-  ["The process", "/#how-it-works"],
   ["Who it’s for", "/#features"],
+  ["The process", "/#how-it-works"],
+
   ["Fairness", "/#fairness"],
   ["Pricing", "/#pricing"],
   ["Questions", "/#faq"],
@@ -31,7 +32,7 @@ export default function Navbar() {
           onClick={() => setOpen(false)}
         >
           Chakri<span className="text-[var(--green)]">Khuji</span>
-          <span className="text-[var(--green)]">.</span>
+          <span className="text-[var(--orange)]">.</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -56,7 +57,10 @@ export default function Navbar() {
             href="/#scanner"
             className="hidden md:inline-flex items-center text-[13px] font-semibold text-[var(--ink)] border-b border-current pb-0.5 hover:text-[var(--green)] transition-colors whitespace-nowrap mr-2"
           >
-            Try the preview <span aria-hidden="true" className="ml-1">↗</span>
+            Try the preview{" "}
+            <span aria-hidden="true" className="ml-1">
+              ↗
+            </span>
           </Link>
 
           <Link

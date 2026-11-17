@@ -8,7 +8,8 @@
   --line: #dce2da;
   --soft-line: #bdcbc2;
   --green: #27664e;
-  --accent: #ab542e;
+  --orange: #c2410c;
+  --accent: #c2410c;
   --background: var(--paper);
   --foreground: var(--ink);
   color-scheme: light;
@@ -22,7 +23,8 @@
   --line: #33483d;
   --soft-line: #50695b;
   --green: #a8d5ac;
-  --accent: #efb383;
+  --orange: #fb923c;
+  --accent: #fb923c;
   --background: var(--paper);
   --foreground: var(--ink);
   color-scheme: dark;
@@ -37,14 +39,18 @@
   --color-soft-line: var(--soft-line);
   --color-brand: var(--green);
   --color-accent: var(--accent);
+  --color-orange: var(--orange);
   --font-sans: var(--font-geist-sans), Arial, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 96px;
   accent-color: var(--green);
+}
+
+html[data-scroll-behavior="smooth"] {
+  scroll-behavior: smooth;
 }
 
 body {

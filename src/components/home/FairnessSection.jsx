@@ -42,17 +42,24 @@ export default function FairnessSection() {
               key={number}
               className={`p-7 sm:p-8 rounded-2xl border transition-all duration-200 ${
                 isHighlighted
-                  ? "border-[var(--green)] bg-[var(--paper)] shadow-md ring-1 ring-[var(--green)]/20"
+                  ? "border-[var(--orange)] bg-[var(--paper)] shadow-md ring-1 ring-[var(--orange)]/30"
                   : "border-[var(--line)] bg-[var(--paper)]/50"
               }`}
             >
-              <span
-                className={`font-mono text-2xl font-bold ${
-                  isHighlighted ? "text-[var(--green)]" : "text-[var(--ink)]"
-                }`}
-              >
-                {number}
-              </span>
+              <div className="flex items-center justify-between">
+                <span
+                  className={`font-mono text-2xl font-bold ${
+                    isHighlighted ? "text-[var(--orange)]" : "text-[var(--ink)]"
+                  }`}
+                >
+                  {number}
+                </span>
+                {isHighlighted && (
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border border-[var(--orange)]/30 bg-[var(--orange)]/10 text-[var(--orange)]">
+                    Protected Flag
+                  </span>
+                )}
+              </div>
               <h3 className="text-xl font-semibold tracking-tight text-[var(--ink)] mt-6 mb-3">
                 {title}
               </h3>

@@ -19,7 +19,7 @@ export default function Footer() {
               className="text-2xl font-black tracking-tight text-[var(--ink)]"
             >
               Chakri<span className="text-[var(--green)]">Khuji</span>
-              <span className="text-[var(--green)]">.</span>
+              <span className="text-[var(--orange)]">.</span>
             </Link>
             <p className="text-xs sm:text-sm text-[var(--muted)] mt-1.5">
               AI-powered recruitment. Human-led decisions.
