@@ -21,7 +21,7 @@ const LoginPage = () => {
   return (
     <>
     <Navbar />
-    <main className="auth-page">
+    <main id="main-content" className="auth-page">
       <div
         id="auth-container"
         className={`auth-container relative w-[850px] h-[550px] bg-white m-5 rounded-[30px] shadow-[0_0_30px_rgba(0,0,0,0.2)] overflow-hidden ${
@@ -126,7 +126,7 @@ const LoginPage = () => {
         {/* Toggle Overlay Box */}
         <div className="toggle-box absolute w-full h-full pointer-events-none">
           {/* Left Panel */}
-          <div className="toggle-panel toggle-left absolute w-1/2 h-full text-white flex flex-col justify-center items-center z-30 pointer-events-auto">
+          <div inert={isActive} aria-hidden={isActive} className="toggle-panel toggle-left absolute w-1/2 h-full text-white flex flex-col justify-center items-center z-30 pointer-events-auto">
             <h1 className="text-[36px] max-[400px]:text-[30px] font-bold">
               Hello, Welcome!
             </h1>
@@ -141,7 +141,7 @@ const LoginPage = () => {
           </div>
 
           {/* Right Panel */}
-          <div className="toggle-panel toggle-right absolute w-1/2 h-full text-white flex flex-col justify-center items-center z-30 pointer-events-auto">
+          <div inert={!isActive} aria-hidden={!isActive} className="toggle-panel toggle-right absolute w-1/2 h-full text-white flex flex-col justify-center items-center z-30 pointer-events-auto">
             <h1 className="text-[36px] max-[400px]:text-[30px] font-bold">
               Welcome Back!
             </h1>
