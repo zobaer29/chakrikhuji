@@ -1,26 +1,86 @@
-/* Original orange sliding login/register design. */
-.auth-page .auth-container { width:min(850px,100%); height:550px; margin:0; border-radius:30px; background:#fff; box-shadow:0 0 30px #00000020; }
-.auth-page .form-box { background:#fff; color:#333; transition:right .6s ease-in-out 1.2s,visibility 0s 1s; }
-.auth-container.active .form-box.login { right:50%; visibility:hidden; }
-.auth-container.active .form-box.register { right:50%; visibility:visible; }
-.auth-page input:focus-visible { outline:2px solid #ff4500; outline-offset:3px; }
-.toggle-box::before { content:""; position:absolute; left:-250%; width:300%; height:100%; background:#ff4500; border-radius:150px; z-index:20; transition:1.8s ease-in-out; }
-.auth-container.active .toggle-box::before { left:50%; }
-.toggle-panel { color:#fff; padding:20px; text-align:center; transition:.6s ease-in-out; }
-.toggle-panel.toggle-left { left:0; transition-delay:1.2s; }
-.auth-container.active .toggle-panel.toggle-left { left:-50%; transition-delay:.6s; }
-.toggle-panel.toggle-right { right:-50%; transition-delay:.6s; }
-.auth-container.active .toggle-panel.toggle-right { right:0; transition-delay:1.2s; }
+.auth-page.auth-themed-page {
+  min-height:calc(100svh - 89px);
+  padding:40px 0 24px;
+  background:var(--paper);
+}
+.auth-themed-page .auth-container {
+  width:min(1200px,calc(100% - 80px));
+  height:max(560px,calc(100svh - 200px));
+  margin:0;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:var(--surface);
+}
+.auth-themed-page .form-box {
+  position:absolute;
+  right:0;
+  width:50%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+  z-index:10;
+  text-align:center;
+  background:var(--surface);
+  color:var(--ink);
+  transition:right .6s ease-in-out 1.2s,visibility 0s 1s;
+}
+.auth-themed-page .form-box form { width:100%; max-width:380px; }
+.auth-themed-page .form-box h1 { font-size:clamp(30px,3vw,40px); font-weight:600; letter-spacing:-1px; line-height:1.2; }
+.auth-themed-page .register { visibility:hidden; }
+.auth-themed-page .active .form-box { right:50%; }
+.auth-themed-page .active .login { visibility:hidden; }
+.auth-themed-page .active .register { visibility:visible; }
+.auth-input {
+  width:100%; padding:14px 18px; border:1px solid var(--line); border-radius:8px;
+  background:var(--paper); color:var(--ink); font:inherit; font-size:16px;
+}
+.auth-input::placeholder { color:var(--muted); }
+.auth-input:focus-visible { outline:2px solid var(--green); outline-offset:3px; }
+.auth-submit {
+  width:100%; min-height:50px; border:0; border-radius:8px;
+  background:var(--green); color:var(--paper); font-size:14px; font-weight:600;
+  transition:filter .2s;
+}
+.auth-submit:hover { filter:brightness(.9); }
+.auth-themed-page .toggle-box::before {
+  content:""; position:absolute; left:-250%; width:300%; height:100%;
+  background:var(--green); border-radius:150px; z-index:20; transition:1.8s ease-in-out;
+}
+.auth-themed-page .active .toggle-box::before { left:50%; }
+.auth-themed-page .toggle-panel {
+  position:absolute; width:50%; height:100%; display:flex; flex-direction:column;
+  justify-content:center; align-items:center; z-index:30; pointer-events:auto;
+  color:var(--paper); padding:32px; text-align:center; transition:.6s ease-in-out;
+}
+.auth-themed-page .toggle-panel h1 { font-size:clamp(28px,3vw,40px); line-height:1.2; letter-spacing:-1px; font-weight:600; }
+.auth-themed-page .toggle-left { left:0; transition-delay:1.2s; }
+.auth-themed-page .active .toggle-left { left:-50%; transition-delay:.6s; }
+.auth-themed-page .toggle-right { right:-50%; transition-delay:.6s; }
+.auth-themed-page .active .toggle-right { right:0; transition-delay:1.2s; }
+.auth-mode-button {
+  width:160px; min-height:46px; border:1px solid currentColor; border-radius:8px;
+  background:transparent; color:inherit; font-size:14px; font-weight:600; transition:background .2s,color .2s;
+}
+.auth-mode-button:hover { background:var(--paper); color:var(--green); }
+.auth-themed-page .auth-notice { width:min(650px,calc(100% - 36px)); margin:20px 0 0; color:var(--muted); font-size:12px; }
+@media(max-width:1050px) { .auth-themed-page .auth-container { width:calc(100% - 48px); } }
+@media(max-width:760px) {
+  .auth-page.auth-themed-page { min-height:calc(100svh - 75px); padding:24px 0; }
+  .auth-themed-page .auth-container { width:calc(100% - 36px); }
+  .auth-themed-page .form-box { padding:28px; }
+}
 @media(max-width:650px) {
- .auth-page .auth-container { height:740px; max-width:460px; }
- .auth-page .form-box { bottom:0; right:0!important; width:100%; height:70%; padding:28px; transition:bottom .6s ease-in-out 1.2s,visibility 0s 1s; }
- .auth-container.active .form-box.login,.auth-container.active .form-box.register { right:0!important; bottom:30%; }
- .toggle-box::before { left:0; top:-270%; width:100%; height:300%; border-radius:20vw; }
- .auth-container.active .toggle-box::before { left:0; top:70%; }
- .toggle-panel { width:100%; height:30%; }
- .toggle-panel.toggle-left { top:0; left:0; }
- .auth-container.active .toggle-panel.toggle-left { left:0; top:-30%; }
- .toggle-panel.toggle-right { right:0; bottom:-30%; }
- .auth-container.active .toggle-panel.toggle-right { bottom:0; }
- .toggle-panel h1 { font-size:30px; }
+  .auth-themed-page .auth-container { height:max(720px,calc(100svh - 170px)); border-radius:16px; }
+  .auth-themed-page .form-box { bottom:0; right:0; width:100%; height:70%; padding:24px; transition:bottom .6s ease-in-out 1.2s,visibility 0s 1s; }
+  .auth-themed-page .active .form-box { right:0; bottom:30%; }
+  .auth-themed-page .toggle-box::before { left:0; top:-270%; width:100%; height:300%; border-radius:20vw; }
+  .auth-themed-page .active .toggle-box::before { left:0; top:70%; }
+  .auth-themed-page .toggle-panel { width:100%; height:30%; padding:20px; }
+  .auth-themed-page .toggle-left { top:0; left:0; }
+  .auth-themed-page .active .toggle-left { left:0; top:-30%; }
+  .auth-themed-page .toggle-right { right:0; bottom:-30%; }
+  .auth-themed-page .active .toggle-right { bottom:0; }
+  .auth-themed-page .toggle-panel h1 { font-size:28px; }
 }

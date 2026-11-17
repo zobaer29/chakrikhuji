@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Navbar from "@/components/navbar";
-import "./AuthForm.css"; // নিচের CSS ফাইলটি ইম্পোর্ট করুন
+import "./AuthForm.css";
 
 const LoginPage = () => {
   const [isActive, setIsActive] = useState(false);
@@ -21,15 +21,15 @@ const LoginPage = () => {
   return (
     <>
     <Navbar />
-    <main id="main-content" className="auth-page">
+    <main id="main-content" className="auth-page auth-themed-page">
       <div
         id="auth-container"
-        className={`auth-container relative w-[850px] h-[550px] bg-white m-5 rounded-[30px] shadow-[0_0_30px_rgba(0,0,0,0.2)] overflow-hidden ${
+        className={`auth-container relative overflow-hidden ${
           isActive ? "active" : ""
         }`}
       >
         {/* Login Form */}
-        <div inert={isActive} aria-hidden={isActive} className="form-box login absolute right-0 w-1/2 h-full bg-white flex items-center text-[#333] text-center p-10 max-[400px]:p-5 z-10 visible">
+        <div inert={isActive} aria-hidden={isActive} className="form-box login">
           <form onSubmit={handleLoginSubmit} className="w-full">
             <h1 className="text-[36px] font-bold -mt-2.5 mb-2.5">Login</h1>
 
@@ -41,7 +41,7 @@ const LoginPage = () => {
                 autoComplete="username"
                 placeholder="Username"
                 required
-                className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg border-none outline-none text-[16px] text-[#333] font-medium placeholder-[#888] placeholder:font-normal"
+                className="auth-input"
               />
             </div>
 
@@ -54,14 +54,14 @@ const LoginPage = () => {
                 autoComplete="current-password"
                 placeholder="Password"
                 required
-                className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg border-none outline-none text-[16px] text-[#333] font-medium placeholder-[#888] placeholder:font-normal"
+                className="auth-input"
               />
             </div>
 
 
             <button
               type="submit"
-              className="w-full h-12 bg-[#ff4500] hover:bg-[#e03d00] transition-colors rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)] border-none cursor-pointer text-[16px] text-white font-semibold"
+              className="auth-submit"
             >
               Login
             </button>
@@ -71,7 +71,7 @@ const LoginPage = () => {
         </div>
 
         {/* Register Form */}
-        <div inert={!isActive} aria-hidden={!isActive} className="form-box register absolute right-0 w-1/2 h-full bg-white flex items-center text-[#333] text-center p-10 max-[400px]:p-5 z-10 invisible">
+        <div inert={!isActive} aria-hidden={!isActive} className="form-box register">
           <form onSubmit={handleRegisterSubmit} className="w-full">
             <h1 className="text-[36px] font-bold -mt-2.5 mb-2.5">Registration</h1>
 
@@ -83,7 +83,7 @@ const LoginPage = () => {
                 autoComplete="username"
                 placeholder="Username"
                 required
-                className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg border-none outline-none text-[16px] text-[#333] font-medium placeholder-[#888] placeholder:font-normal"
+                className="auth-input"
               />
             </div>
 
@@ -95,7 +95,7 @@ const LoginPage = () => {
                 autoComplete="email"
                 placeholder="Email"
                 required
-                className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg border-none outline-none text-[16px] text-[#333] font-medium placeholder-[#888] placeholder:font-normal"
+                className="auth-input"
               />
             </div>
 
@@ -108,13 +108,13 @@ const LoginPage = () => {
                 autoComplete="new-password"
                 placeholder="Password"
                 required
-                className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg border-none outline-none text-[16px] text-[#333] font-medium placeholder-[#888] placeholder:font-normal"
+                className="auth-input"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full h-12 bg-[#ff4500] hover:bg-[#e03d00] transition-colors rounded-lg shadow-[0_0_10px_rgba(0,0,0,0.1)] border-none cursor-pointer text-[16px] text-white font-semibold"
+              className="auth-submit"
             >
               Register
             </button>
@@ -126,7 +126,7 @@ const LoginPage = () => {
         {/* Toggle Overlay Box */}
         <div className="toggle-box absolute w-full h-full pointer-events-none">
           {/* Left Panel */}
-          <div inert={isActive} aria-hidden={isActive} className="toggle-panel toggle-left absolute w-1/2 h-full text-white flex flex-col justify-center items-center z-30 pointer-events-auto">
+          <div inert={isActive} aria-hidden={isActive} className="toggle-panel toggle-left">
             <h1 className="text-[36px] max-[400px]:text-[30px] font-bold">
               Hello, Welcome!
             </h1>
@@ -134,14 +134,14 @@ const LoginPage = () => {
             <button
               type="button"
               onClick={() => changeMode(true)}
-              className="w-40 h-[46px] bg-transparent hover:bg-white hover:text-[#ff4500] transition-colors border-2 border-white rounded-lg cursor-pointer text-[16px] font-semibold"
+              className="auth-mode-button"
             >
               Register
             </button>
           </div>
 
           {/* Right Panel */}
-          <div inert={!isActive} aria-hidden={!isActive} className="toggle-panel toggle-right absolute w-1/2 h-full text-white flex flex-col justify-center items-center z-30 pointer-events-auto">
+          <div inert={!isActive} aria-hidden={!isActive} className="toggle-panel toggle-right">
             <h1 className="text-[36px] max-[400px]:text-[30px] font-bold">
               Welcome Back!
             </h1>
@@ -149,7 +149,7 @@ const LoginPage = () => {
             <button
               type="button"
               onClick={() => changeMode(false)}
-              className="w-40 h-[46px] bg-transparent hover:bg-white hover:text-[#ff4500] transition-colors border-2 border-white rounded-lg cursor-pointer text-[16px] font-semibold"
+              className="auth-mode-button"
             >
               Login
             </button>
