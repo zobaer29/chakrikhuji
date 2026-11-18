@@ -86,3 +86,104 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* A hinged page reveal for the mobile company workspace. */
+.company-mobile-menu::backdrop {
+  background: rgb(8 20 16 / 45%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.company-mobile-menu[open] {
+  perspective: 1200px;
+}
+
+.company-menu-page {
+  transform-origin: left center;
+  padding-bottom: env(safe-area-inset-bottom);
+  background-image: linear-gradient(90deg, rgb(0 0 0 / 7%), transparent 18px);
+}
+
+.company-mobile-menu[open] .company-menu-page {
+  animation: company-page-open 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes company-page-open {
+  from {
+    opacity: 0;
+    transform: translateX(-35%) rotateY(-65deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0);
+  }
+}
+
+.mobile-nav-icon {
+  position: relative;
+  width: 20px;
+  height: 16px;
+}
+
+.mobile-nav-icon span {
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 250ms ease, opacity 180ms ease;
+}
+
+.mobile-nav-icon span:nth-child(1) { top: 0; }
+.mobile-nav-icon span:nth-child(2) { top: 7px; }
+.mobile-nav-icon span:nth-child(3) { top: 14px; }
+.mobile-nav-icon[data-open="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mobile-nav-icon[data-open="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.mobile-nav-icon[data-open="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-nav-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  pointer-events: none;
+  transition: grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1), visibility 320ms;
+}
+
+.mobile-nav-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-nav-content {
+  opacity: 0;
+  transform: translateY(-10px);
+  border-radius: 0 0 24px 24px;
+  transition: opacity 220ms ease, transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-nav-panel[data-open="true"] .mobile-nav-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-nav-link {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 160ms ease, transform 200ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+.mobile-nav-panel[data-open="true"] .mobile-nav-link {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: var(--nav-delay, 0ms);
+}
+
+@media (min-width: 1024px) {
+  .mobile-nav-panel { display: none; }
+}

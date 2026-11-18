@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import { useState, useSyncExternalStore } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { subscribeTheme, getTheme, getServerTheme, toggleTheme } from "./theme";
 
 const links = [
@@ -13,15 +14,41 @@ const links = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const headerRef = useRef(null);
+  const menuButtonRef = useRef(null);
   const [open, setOpen] = useState(false);
   const theme = useSyncExternalStore(subscribeTheme, getTheme, getServerTheme);
 
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event) => {
+      if (!headerRef.current?.contains(event.target)) setOpen(false);
+    };
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const onResize = () => { if (desktop.matches) setOpen(false); };
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", onResize);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", onResize);
+    };
+  }, [open]);
+
+  if (["/company", "/seekers"].some((base) => pathname === base || pathname?.startsWith(`${base}/`))) return null;
+
   return (
     <header
+      ref={headerRef}
       className="sticky top-0 z-50 bg-[var(--paper)]/95 backdrop-blur-md border-b border-[var(--line)] transition-colors"
-      onKeyDown={(event) => {
-        if (event.key === "Escape") setOpen(false);
-      }}
     >
       <div className="w-[min(1200px,calc(100%-36px))] sm:w-[min(1200px,calc(100%-48px))] mx-auto flex items-center justify-between gap-3 h-18 sm:h-20">
         {/* Brand */}
@@ -120,60 +147,39 @@ export default function Navbar() {
           {/* Mobile Menu Toggle Button */}
           <button
             type="button"
-            className="lg:hidden inline-flex items-center justify-center p-2 rounded-lg border border-[var(--line)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--green)] transition-colors"
+            ref={menuButtonRef}
+            className="mobile-nav-toggle lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface text-ink transition-colors hover:border-brand active:bg-paper"
             aria-expanded={open}
             aria-controls="mobile-navigation"
             aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen((current) => !current)}
           >
-            {open ? (
-              <svg
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="4" y1="6" x2="20" y2="6" />
-                <line x1="4" y1="12" x2="20" y2="12" />
-                <line x1="4" y1="18" x2="20" y2="18" />
-              </svg>
-            )}
+            <span className="mobile-nav-icon" data-open={open} aria-hidden="true">
+              <span /><span /><span />
+            </span>
           </button>
         </div>
       </div>
 
       {/* Mobile Drawer */}
-      {open && (
+      <div className="mobile-nav-panel lg:hidden" data-open={open} inert={!open} aria-hidden={!open}>
+        <div className="min-h-0 overflow-hidden">
         <nav
           id="mobile-navigation"
           aria-label="Mobile navigation"
-          className="lg:hidden border-t border-[var(--line)] bg-[var(--surface)] px-5 py-6 shadow-xl animate-in fade-in duration-200"
+          className="mobile-nav-content max-h-[calc(100dvh-5rem)] overflow-y-auto border-t border-line bg-surface px-5 py-6 shadow-xl sm:px-6"
         >
+          <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">Explore ChakriKhuji</p>
           <div className="flex flex-col gap-1">
-            {links.map(([label, href]) => (
+            {links.map(([label, href], index) => (
               <Link
                 key={href}
                 href={href}
                 onClick={() => setOpen(false)}
-                className="px-3 py-2.5 rounded-lg text-sm font-medium text-[var(--ink)] hover:bg-[var(--paper)] hover:text-[var(--green)] transition-colors"
+                style={{ "--nav-delay": `${index * 35}ms` }}
+                className="mobile-nav-link flex items-center justify-between rounded-xl px-3 py-3 text-sm font-medium text-ink transition-colors hover:bg-paper hover:text-brand"
               >
-                {label}
+                {label}<span aria-hidden="true" className="text-muted">↗</span>
               </Link>
             ))}
             <Link
@@ -195,7 +201,8 @@ export default function Navbar() {
             </Link>
           </div>
         </nav>
-      )}
+        </div>
+      </div>
     </header>
   );
 }
