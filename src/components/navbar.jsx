@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Brand from "@/components/Brand";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { subscribeTheme, getTheme, getServerTheme, toggleTheme } from "./theme";
@@ -58,8 +59,7 @@ export default function Navbar() {
           aria-label="ChakriKhuji home"
           onClick={() => setOpen(false)}
         >
-          Chakri<span className="text-[var(--green)]">Khuji</span>
-          <span className="text-[var(--orange)]">.</span>
+          <Brand compact />
         </Link>
 
         {/* Desktop Navigation */}

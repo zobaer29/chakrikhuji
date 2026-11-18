@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Brand from "@/components/Brand";
 
 const links = [
   ["Who it’s for", "/#features"],
@@ -18,8 +19,7 @@ export default function Footer() {
               href="/#home"
               className="text-2xl font-black tracking-tight text-[var(--ink)]"
             >
-              Chakri<span className="text-[var(--green)]">Khuji</span>
-              <span className="text-[var(--orange)]">.</span>
+              <Brand />
             </Link>
             <p className="text-xs sm:text-sm text-[var(--muted)] mt-1.5">
               AI-powered recruitment. Human-led decisions.
