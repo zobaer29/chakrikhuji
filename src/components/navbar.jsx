@@ -1,6 +1,9 @@
 "use client";
 import Link from "next/link";
 import Brand from "@/components/Brand";
+import LogoutButton from "@/components/LogoutButton";
+import { useSession } from "@/lib/auth-client";
+import { getDashboardPath } from "@/lib/roles";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { subscribeTheme, getTheme, getServerTheme, toggleTheme } from "./theme";
@@ -16,6 +19,8 @@ const links = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { data: session, isPending } = useSession();
+  const accountHref = session ? getDashboardPath(session.user) : "/Login";
   const headerRef = useRef(null);
   const menuButtonRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -91,12 +96,18 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/Login"
+            href={accountHref}
             className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-[13px] font-semibold rounded-lg bg-[var(--ink)] text-[var(--paper)] hover:opacity-90 transition-opacity whitespace-nowrap"
             onClick={() => setOpen(false)}
           >
-            Login
+            {isPending ? "Loading…" : session ? "Dashboard" : "Login"}
           </Link>
+          {session && (
+            <LogoutButton
+              onLogoutStart={() => setOpen(false)}
+              className="hidden sm:inline-flex items-center justify-center px-3 py-2 text-[13px] font-semibold rounded-lg border border-[var(--line)] hover:bg-[var(--surface)] transition-colors whitespace-nowrap"
+            />
+          )}
 
           {/* Theme Toggle */}
           <button
@@ -193,12 +204,18 @@ export default function Navbar() {
           </div>
           <div className="mt-4 pt-4 border-t border-[var(--line)] flex flex-col gap-2">
             <Link
-              href="/Login"
+              href={accountHref}
               onClick={() => setOpen(false)}
               className="w-full flex items-center justify-center py-3 text-sm font-semibold rounded-lg bg-[var(--ink)] text-[var(--paper)] hover:opacity-90 transition-opacity"
             >
-              Login / Sign up
+              {isPending ? "Loading…" : session ? "Dashboard" : "Login / Sign up"}
             </Link>
+            {session && (
+              <LogoutButton
+                onLogoutStart={() => setOpen(false)}
+                className="w-full flex items-center justify-center py-3 text-sm font-semibold rounded-lg border border-[var(--line)] hover:bg-[var(--paper)] transition-colors"
+              />
+            )}
           </div>
         </nav>
         </div>

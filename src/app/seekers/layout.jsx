@@ -1,6 +1,8 @@
+import { requireAccountType } from "@/lib/auth-session";
 import SeekerSidebar from "@/components/seekers/SeekerSidebar";
 
-export default function SeekerLayout({ children }) {
+export default async function SeekerLayout({ children }) {
+  await requireAccountType("job-seeker");
   return (
     <div className="min-h-screen lg:flex">
       <SeekerSidebar />

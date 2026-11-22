@@ -1,32 +1,90 @@
 "use client";
-import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import Swal from "sweetalert2";
+import { getDashboardPath } from "@/lib/roles";
 
-const LoginPage = ({ initialRole, initialRegister }) => {
+const AccountForm = ({ initialRole, initialRegister }) => {
   const [isActive, setIsActive] = useState(initialRegister);
+  const router = useRouter();
+  const [pending, setPending] = useState(false);
   const [accountType, setAccountType] = useState(initialRole);
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const restoreMode = () => {
+      const url = new URL(window.location.href);
+      setIsActive(url.pathname === "/Register" || url.searchParams.get("mode") === "register");
+      setMessage("");
+    };
+    window.addEventListener("popstate", restoreMode);
+    return () => window.removeEventListener("popstate", restoreMode);
+  }, []);
 
   const changeMode = (active) => {
     setIsActive(active);
     setMessage("");
+    // Keep the curtain mounted so the original CSS transition can finish.
+    window.history.pushState(null, "", `${active ? "/Register" : "/Login"}?role=${accountType}`);
   };
 
-  const handleLoginSubmit = (e) => {
-    e.preventDefault();
-    setMessage(
-      "Sign-in is not connected yet. Your details have not been sent or saved.",
-    );
+  const showAlert = async (icon, title, text) => {
+    setMessage(text);
+    return Swal.fire({
+      icon,
+      title,
+      text,
+      confirmButtonText: "OK",
+      confirmButtonColor: "var(--green)",
+      background: "var(--surface)",
+      color: "var(--ink)",
+      heightAuto: false,
+    });
   };
 
-  const handleRegisterSubmit = (e) => {
+  const submit = async (e, register) => {
     e.preventDefault();
-    setMessage(
-      `${
-        accountType === "company" ? "Company / HR" : "Job seeker"
-      } registration is not connected yet. Your details have not been sent or saved.`,
-    );
+    if (pending) return;
+    const form = e.currentTarget;
+    if (!form.reportValidity()) return;
+    const fields = new FormData(form);
+    const email = fields.get("email").trim();
+    const password = fields.get("password");
+    const name = register ? fields.get("name").trim() : "";
+    const companyName = register ? (fields.get("companyName") || "").trim() : "";
+    if (register && (!name || (accountType === "company" && !companyName))) {
+      await showAlert("warning", "Check your details", "Please enter a name and, for company accounts, a company name.");
+      return;
+    }
+    setPending(true);
+    setMessage("");
+    try {
+      const result = register
+        ? await authClient.signUp.email({
+            name, email, password, accountType, companyName,
+            callbackURL: `/Login?role=${accountType}`,
+          })
+        : await authClient.signIn.email({ email, password });
+      if (result.error) {
+        await showAlert("error", register ? "Registration failed" : "Login failed", result.error.message || "Unable to continue. Please try again.");
+      } else if (register) {
+        form.reset();
+        await showAlert("success", "Check your email", "Registration submitted. Check your email for a verification link before signing in.");
+      } else {
+        await showAlert("success", "Welcome back!", "You have signed in successfully.");
+        router.replace(getDashboardPath(result.data?.user));
+        router.refresh();
+      }
+    } catch {
+      await showAlert("error", "Connection problem", "Unable to connect. Please try again.");
+    } finally {
+      setPending(false);
+    }
   };
+
+  const handleLoginSubmit = (e) => submit(e, false);
+  const handleRegisterSubmit = (e) => submit(e, true);
 
   return (
     <main
@@ -60,16 +118,16 @@ const LoginPage = ({ initialRole, initialRegister }) => {
             </h1>
 
             <div className="relative my-5 sm:my-7">
-              <label htmlFor="login-username" className="sr-only">
-                Username
+              <label htmlFor="login-email" className="sr-only">
+                Email
               </label>
               <input
-                id="login-username"
-                type="text"
-                name="username"
-                aria-label="Username"
-                autoComplete="username"
-                placeholder="Username"
+                id="login-email"
+                type="email"
+                name="email"
+                aria-label="Email"
+                autoComplete="email"
+                placeholder="Email"
                 required
                 className="w-full px-4.5 py-3.5 rounded-lg border border-[var(--line)] bg-[var(--paper)] text-[var(--ink)] text-base placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--orange)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] transition-all"
               />
@@ -85,6 +143,7 @@ const LoginPage = ({ initialRole, initialRegister }) => {
                 name="password"
                 aria-label="Password"
                 minLength={8}
+                maxLength={128}
                 autoComplete="current-password"
                 placeholder="Password"
                 required
@@ -94,9 +153,11 @@ const LoginPage = ({ initialRole, initialRegister }) => {
 
             <button
               type="submit"
+              disabled={pending}
+              aria-busy={pending}
               className="w-full min-h-[50px] rounded-lg bg-[var(--green)] text-[var(--paper)] text-sm font-semibold hover:brightness-105 active:scale-[0.99] transition-all cursor-pointer shadow-sm"
             >
-              Login
+              {pending ? "Signing in…" : "Login"}
             </button>
           </form>
         </div>
@@ -203,16 +264,16 @@ const LoginPage = ({ initialRole, initialRegister }) => {
             )}
 
             <div className="relative my-3 sm:my-4">
-              <label htmlFor="reg-username" className="sr-only">
-                Username
+              <label htmlFor="reg-name" className="sr-only">
+                Full name
               </label>
               <input
-                id="reg-username"
+                id="reg-name"
                 type="text"
-                name="username"
-                aria-label="Username"
-                autoComplete="username"
-                placeholder="Username"
+                name="name"
+                aria-label="Full name"
+                autoComplete="name"
+                placeholder="Full name"
                 required
                 className="w-full px-4.5 py-3 rounded-lg border border-[var(--line)] bg-[var(--paper)] text-[var(--ink)] text-base placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--orange)] focus:ring-offset-2 focus:ring-offset-[var(--surface)] transition-all"
               />
@@ -244,6 +305,7 @@ const LoginPage = ({ initialRole, initialRegister }) => {
                 name="password"
                 aria-label="Password"
                 minLength={8}
+                maxLength={128}
                 autoComplete="new-password"
                 placeholder="Password"
                 required
@@ -253,9 +315,11 @@ const LoginPage = ({ initialRole, initialRegister }) => {
 
             <button
               type="submit"
+              disabled={pending}
+              aria-busy={pending}
               className="w-full min-h-[50px] mt-2 rounded-lg bg-[var(--green)] text-[var(--paper)] text-sm font-semibold hover:brightness-105 active:scale-[0.99] transition-all cursor-pointer shadow-sm"
             >
-              {accountType === "company"
+              {pending ? "Registering…" : accountType === "company"
                 ? "Register company"
                 : "Register for free"}
             </button>
@@ -331,26 +395,27 @@ const LoginPage = ({ initialRole, initialRegister }) => {
         role="status"
       >
         {message ||
-          "Preview only — account sign-in and registration are not available yet."}
+          "Use your email address and a password of 8–128 characters."}
       </p>
     </main>
   );
 };
 
-function RegistrationRoute() {
+function RegistrationRoute({ registerMode }) {
   const params = useSearchParams();
   const role = params.get("role") === "company" ? "company" : "job-seeker";
-  const register = params.get("mode") === "register";
+  const register = registerMode || params.get("mode") === "register";
   return (
-    <LoginPage
-      key={`${role}-${register}`}
+    <AccountForm
+      key={role}
       initialRole={role}
       initialRegister={register}
     />
   );
 }
 
-export default function LoginRoute() {
+export default function LoginPage() {
+  const registerMode = false;
   return (
     <Suspense
       fallback={
@@ -364,7 +429,7 @@ export default function LoginRoute() {
         </main>
       }
     >
-      <RegistrationRoute />
+      <RegistrationRoute registerMode={registerMode} />
     </Suspense>
   );
 }

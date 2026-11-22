@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  output: "export",
+  // Authentication requires the Next.js server for sessions and API routes.
   experimental: {
     agentFeedback: true,
   },

@@ -1,6 +1,8 @@
+import { requireAccountType } from "@/lib/auth-session";
 import CompanySidebar from "@/components/company/CompanySidebar";
 
-export default function CompanyLayout({ children }) {
+export default async function CompanyLayout({ children }) {
+  await requireAccountType("company");
   return (
     <div className="min-h-screen lg:flex">
       <CompanySidebar />

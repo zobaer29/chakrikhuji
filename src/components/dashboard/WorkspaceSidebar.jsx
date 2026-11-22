@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Brand from "@/components/Brand";
+import LogoutButton from "@/components/LogoutButton";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import {
@@ -79,10 +80,8 @@ function SidebarContent({ onNavigate, config }) {
             {theme === "dark" ? "☾" : "☀"}
           </span>
         </button>
-        <Link
-          href={`/Login?role=${config.id === "company" ? "company" : "job-seeker"}`}
-          replace
-          onClick={onNavigate}
+        <LogoutButton
+          onLogoutStart={onNavigate}
           className="mb-4 flex w-full items-center gap-3 rounded-xl border border-line px-3 py-3 text-sm font-semibold text-orange transition-colors hover:bg-paper"
         >
           <svg
@@ -99,7 +98,7 @@ function SidebarContent({ onNavigate, config }) {
             <path d="M9 4H4v16h5M9 12h12M17 8l4 4-4 4" />
           </svg>
           Log out
-        </Link>
+        </LogoutButton>
         <Link
           href="/"
           onClick={onNavigate}

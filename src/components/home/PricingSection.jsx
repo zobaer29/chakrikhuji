@@ -55,7 +55,7 @@ export default function PricingSection() {
             </ul>
             <Link
               className="mt-auto inline-flex items-center justify-center gap-7 rounded-lg bg-[var(--green)] px-[22px] py-4 text-sm font-semibold text-[var(--paper)] transition-transform motion-safe:hover:-translate-y-[3px] motion-reduce:transition-none"
-              href="/Login?mode=register&role=job-seeker"
+              href="/Register?role=job-seeker"
             >
               Register for free <span aria-hidden="true">↗</span>
             </Link>
@@ -92,7 +92,7 @@ export default function PricingSection() {
             </ul>
             <Link
               className="mt-auto inline-flex items-center justify-center gap-7 rounded-lg bg-[var(--green)] px-[22px] py-4 text-sm font-semibold text-[var(--paper)] transition-transform motion-safe:hover:-translate-y-[3px] motion-reduce:transition-none"
-              href="/Login?mode=register&role=company"
+              href="/Register?role=company"
             >
               Register your company <span aria-hidden="true">↗</span>
             </Link>
