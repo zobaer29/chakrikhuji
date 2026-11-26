@@ -111,8 +111,9 @@ const HybridHeroCanvas = () => {
     };
   }, []);
 
+
   return (
-    <section id="home" className="pt-8 sm:pt-16 pb-12 sm:pb-16">
+  <section id="home" className="pt-25 sm:pt-37 pb-24 sm:pb-32">
       <div className="w-[min(1200px,calc(100%-36px))] sm:w-[min(1200px,calc(100%-48px))] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
         {/* Left Copy */}
         <div className="flex flex-col items-start">
